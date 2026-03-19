@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }}</title>
+    <link rel="stylesheet" href="{% static 'book/style.css' %}">
+</head>
+<body>
+    <div class="glass-container">
+        <h1>{{ book.title }}</h1>
+        <h2>by {{ book.author }}</h2>
+        
+        <div class="book-card" style="background: rgba(0,0,0,0.2); border: none;">
+            <p style="color: white; font-size: 1.1rem; line-height: 1.6;">{{ book.description }}</p>
+            {% if book.published_year %}
+            <p class="book-meta" style="margin-bottom: 0;"><strong>Published Year:</strong> {{ book.published_year }}</p>
+            {% endif %}
+        </div>
+        
+        <br><br>
+        <a href="javascript:history.back()" class="btn">← Back to List</a>
+    </div>
+</body>
+</html>

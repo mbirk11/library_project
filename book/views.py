@@ -9,11 +9,15 @@ def index(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
             try:
                 reader = Reader.objects.get(email=email)
-                # Success! Log in
-                request.session['reader_id'] = reader.id
-                return redirect('reader-books')
+                if reader.password == password:
+                    # Success! Log in
+                    request.session['reader_id'] = reader.id
+                    return redirect('reader-books')
+                else:
+                    form.add_error(None, "Invalid password")
             except Reader.DoesNotExist:
                 # Not found, redirect to register with email passed in session
                 request.session['temp_email'] = email
@@ -34,10 +38,16 @@ def register(request):
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             age = form.cleaned_data['age']
+            password = form.cleaned_data['password']
             
-            reader, created = Reader.objects.get_or_create(
+            reader, created = Reader.objects.update_or_create(
                 email=email,
-                defaults={'first_name': first_name, 'last_name': last_name, 'age': age}
+                defaults={
+                    'first_name': first_name, 
+                    'last_name': last_name, 
+                    'age': age,
+                    'password': password
+                }
             )
             request.session['reader_id'] = reader.id
             return redirect('reader-books')
@@ -54,7 +64,7 @@ def reader_books(request):
         
     reader = Reader.objects.get(id=reader_id)
     books = Book.objects.all()
-    return render(request, 'book/books_list.html', {'reader': reader, 'books': books})
+    return render(request, 'book/book_list.html', {'reader': reader, 'books': books})
 
 # Added generic views
 class BookListView(generic.ListView):

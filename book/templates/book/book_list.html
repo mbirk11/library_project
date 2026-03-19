@@ -9,8 +9,14 @@
 </head>
 <body>
     <div class="glass-container large">
-        <h1>All Books Directory</h1>
-        <h2>Complete library collection:</h2>
+        {% if reader %}
+            <h1>Welcome, {{ reader.first_name }}!</h1>
+            <p style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-secondary);">Reader Details: {{ reader.first_name }} {{ reader.last_name }} (Age: {{ reader.age }})</p>
+            <h2>Here is our book collection:</h2>
+        {% else %}
+            <h1>All Books Directory</h1>
+            <h2>Complete library collection:</h2>
+        {% endif %}
         
         {% if books %}
             <ul class="book-list">
@@ -21,6 +27,7 @@
                     {% if book.published_year %}<div class="book-meta">Published: {{ book.published_year }}</div>{% endif %}
                     <br>
                     <a href="{% url 'book-detail' book.pk %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View Details</a>
+                    <a href="{% url 'add_to_profile' book.pk %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--primary-hover);">Add to Profile</a>
                 </li>
             {% endfor %}
             </ul>
@@ -28,7 +35,9 @@
             <p>No books currently available in the collection.</p>
         {% endif %}
         
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
             <a href="{% url 'index' %}" class="btn">← Back to access</a>
+            <a href="{% url 'reader_profile' %}" class="btn" style="background: #10b981;">My Profile →</a>
         </div>
     </div>
 </body>

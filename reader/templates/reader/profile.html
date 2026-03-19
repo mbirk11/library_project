@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Library</title>
+    <link rel="stylesheet" href="{% static 'book/style.css' %}">
+</head>
+<body>
+    <div class="glass-container large">
+        <h1>Welcome, {{ reader.first_name }}!</h1>
+        <p>This is your personal book collection.</p>
+        
+        <div class="book-grid">
+            {% if my_books %}
+                <ul class="book-list">
+                {% for book in my_books %}
+                    <li class="book-card">
+                        <div class="book-title">{{ book.title }}</div>
+                        <div class="book-author">by {{ book.author }}</div>
+                        <div class="book-desc">{{ book.description|truncatewords:20 }}</div>
+                        <a href="{% url 'book-detail' book.pk %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View Details</a>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>You haven't added any books to your profile yet.</p>
+                <a href="{% url 'book-list' %}" class="btn">Browse collection</a>
+            {% endif %}
+        </div>
+        
+        <br>
+        <div style="display: flex; gap: 1rem;">
+            <a href="{% url 'book-list' %}" class="btn">← Back to books</a>
+            <a href="{% url 'index' %}" class="btn" style="background: var(--surface-border);">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
